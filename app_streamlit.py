@@ -291,10 +291,12 @@ st.markdown("""
 @st.cache_resource
 def cargar_todo():
     """Carga modelos, encoders y métricas (se cachea para eficiencia)"""
-    # Modelos - usando tf.keras
-    modelo_1 = tf.keras.models.load_model('modelos/modelo_1_control_calidad.h5')
-    modelo_2 = tf.keras.models.load_model('modelos/modelo_2_predictor_abv.h5')
-    modelo_3 = tf.keras.models.load_model('modelos/modelo_3_clasificador_experimental.h5')
+    import tensorflow as tf
+    
+    # Modelos - método compatible con todas las versiones
+    modelo_1 = tf.keras.models.load_model('modelos/modelo_1_control_calidad.h5', compile=False)
+    modelo_2 = tf.keras.models.load_model('modelos/modelo_2_predictor_abv.h5', compile=False)
+    modelo_3 = tf.keras.models.load_model('modelos/modelo_3_clasificador_experimental.h5', compile=False)
     
     # Encoders
     with open('scaler.pkl', 'rb') as f:
