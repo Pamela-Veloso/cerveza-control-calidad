@@ -1,0 +1,465 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte Preparación de Datos</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section h2 {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .stat-card h3 {
+            margin: 0;
+            font-size: 2em;
+            font-weight: bold;
+        }
+        .stat-card p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th {
+            background-color: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .conclusiones {
+            background-color: #e8f4f8;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .conclusiones h3 {
+            color: #667eea;
+            margin-top: 0;
+        }
+        .conclusiones ul {
+            line-height: 1.8;
+        }
+        .graph-container {
+            margin: 30px 0;
+        }
+        .footer {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+            margin-top: 40px;
+            border-top: 2px solid #ddd;
+        }
+        .highlight {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔧 Preparación de Datos</h1>
+        <p>Sistema de Control de Calidad Cervecero</p>
+        <p>Generado: 14/11/2025 22:03:41</p>
+    </div>
+
+    <!-- RESUMEN EJECUTIVO -->
+    <div class="section">
+        <h2>📊 Resumen Ejecutivo</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>6</h3>
+                <p>Features Totales</p>
+            </div>
+            <div class="stat-card">
+                <h3>207</h3>
+                <p>Muestras de Entrenamiento</p>
+            </div>
+            <div class="stat-card">
+                <h3>23</h3>
+                <p>Muestras de Validación</p>
+            </div>
+            <div class="stat-card">
+                <h3>23</h3>
+                <p>Muestras de Prueba</p>
+            </div>
+        </div>
+
+        <div class="highlight">
+            <strong>🎯 Data Augmentation Aplicado:</strong> SMOTE 2x duplicó el dataset de entrenamiento
+            de 104 a 207 muestras (+103 sintéticas).
+            Esto mejorará significativamente la capacidad de generalización del modelo.
+        </div>
+    </div>
+
+    <!-- FEATURE ENGINEERING -->
+    <div class="section">
+        <h2>🛠️ Feature Engineering</h2>
+        
+        <div class="conclusiones">
+            <h3>✅ Variables Originales (4):</h3>
+            <ul>
+                <li><strong>OG</strong> (Original Gravity): Densidad inicial del mosto</li>
+                <li><strong>ABV</strong> (Alcohol By Volume): Porcentaje de alcohol</li>
+                <li><strong>pH</strong>: Nivel de acidez</li>
+                <li><strong>IBU</strong> (International Bitterness Units): Amargor</li>
+            </ul>
+        </div>
+
+        <div class="conclusiones">
+            <h3>🆕 Variables Creadas (2):</h3>
+            <ul>
+                <li><strong>ABV_OG_ratio</strong>: Eficiencia de fermentación (ABV/OG)</li>
+                <li><strong>IBU_ABV_ratio</strong>: Balance entre amargor y alcohol (IBU/ABV)</li>
+            </ul>
+        </div>
+
+        <table>
+            <tr>
+                <th>Estadística</th>
+                <th>ABV_OG_ratio</th>
+                <th>IBU_ABV_ratio</th>
+            </tr>
+            <tr>
+                <td>Media</td>
+                <td>0.3833</td>
+                <td>4.2672</td>
+            </tr>
+            <tr>
+                <td>Desv. Estándar</td>
+                <td>0.0821</td>
+                <td>1.9618</td>
+            </tr>
+            <tr>
+                <td>Mínimo</td>
+                <td>0.1712</td>
+                <td>2.0513</td>
+            </tr>
+            <tr>
+                <td>Máximo</td>
+                <td>0.5540</td>
+                <td>18.3600</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- SCORE DE CALIDAD -->
+    <div class="section">
+        <h2>⭐ Score de Calidad</h2>
+        
+        <div class="conclusiones">
+            <h3>💡 ¿Cómo se calcula?</h3>
+            <p>El score de calidad (0-1) se calcula midiendo qué tan cerca están los parámetros 
+            de los rangos óptimos para cada estilo, con los siguientes pesos:</p>
+            <ul>
+                <li><strong>OG:</strong> 15% del score</li>
+                <li><strong>ABV:</strong> 35% del score (CRÍTICO)</li>
+                <li><strong>pH:</strong> 15% del score</li>
+                <li><strong>IBU:</strong> 35% del score (CRÍTICO)</li>
+            </ul>
+        </div>
+
+        <table>
+            <tr>
+                <th>Estilo</th>
+                <th>Score Promedio</th>
+                <th>Score Mínimo</th>
+                <th>Score Máximo</th>
+                <th>Desv. Estándar</th>
+            </tr>
+            <tr>
+                <td>IPA</td>
+                <td>0.509</td>
+                <td>0.098</td>
+                <td>0.823</td>
+                <td>0.187</td>
+            </tr><tr>
+                <td>Light Lager</td>
+                <td>0.415</td>
+                <td>0.000</td>
+                <td>0.798</td>
+                <td>0.175</td>
+            </tr><tr>
+                <td>Premium Lager</td>
+                <td>0.307</td>
+                <td>-0.000</td>
+                <td>0.758</td>
+                <td>0.180</td>
+            </tr>
+        </table>
+
+        <div class="graph-container">
+            <html>
+<head><meta charset="utf-8" /></head>
+<body>
+    <div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>                <div id="graph1" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("graph1")) {                    Plotly.newPlot(                        "graph1",                        [{"alignmentgroup":"True","bingroup":"x","hovertemplate":"Score de Calidad=%{x}\u003cbr\u003ecount=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"","marker":{"color":"skyblue","pattern":{"shape":""}},"name":"","nbinsx":30,"offsetgroup":"","orientation":"v","showlegend":false,"x":[0.30119047619047656,0.10000000000000014,0.6855555555555553,0.11285714285714298,0.3833333333333335,0.3431944444444447,0.16730158730158728,0.23333333333333392,0.5212499999999998,0.38341269841269837,-4.4408920985006264e-17,0.35583333333333356,0.3073015873015878,0.22444444444444467,0.7583333333333337,0.14285714285714285,0.29055555555555534,0.22250000000000006,0.35119047619047644,0.2694444444444446,0.549444444444444,0.35119047619047644,0.07499999999999982,0.46305555555555517,0.09285714285714289,0.2833333333333334,0.5944444444444447,0.21730158730158713,0.28333333333333377,0.2474999999999996,0.25841269841269826,0.02499999999999988,0.6083333333333334,0.2623015873015878,0.14944444444444413,0.35583333333333356,0.042857142857142726,0.19055555555555562,0.42500000000000004,0.27619047619047665,0.19444444444444478,0.3431944444444442,0.37244047619047665,0.09625000000000003,0.7118055555555555,0.13910714285714307,0.32958333333333356,0.4044444444444447,0.2548015873015872,0.5930555555555552,0.22660714285714312,0.6072478991596632,0.4604761904761901,0.5985686274509806,0.8064733893557429,0.3426365546218487,0.4675238095238099,0.58391456582633,0.3929761904761899,0.46656862745098054,0.7265567226890761,0.5627615546218486,0.2923154761904765,0.5729264705882346,0.1974999999999995,0.7044257703081235,0.641568627450981,0.7170175070028009,0.09800000000000064,0.6657002801120442,0.3971666666666664,0.5576995798319331,0.5957352941176474,0.6481127450980392,0.3960476190476197,0.6487002801120441,0.1399999999999997,0.6985567226890761,0.41073529411764764,0.6531127450980391,0.3533333333333335,0.6748431372549013,0.14085714285714224,0.8234733893557424,0.6254019607843145,0.4035294117647061,0.33750000000000036,0.6123669467787107,0.4389047619047611,0.7636162464985997,0.4110924369747904,0.5915294117647061,0.20821428571428605,0.7180812324929964,0.3961904761904755,0.6997591036414569,0.5148067226890761,0.73358893557423,0.33716666666666656,0.39232142857142827,0.16666666666666566,0.504166666666666,0.47083333333333305,0.320833333333333,0.6999999999999993,0.3833333333333331,0.35249999999999915,0.446999999999999,0.23166666666666613,0.5541666666666657,0.23333333333333212,0.43333333333333285,0.3999999999999997,0.2133333333333323,0.5499999999999993,0.283333333333332,0.6391666666666658,0.3211666666666659,0.339166666666666,0.4558333333333322,0.24999999999999908,0.6833333333333319,0.33333333333333187,0.1833333333333326,0.5666666666666655,0.33333333333333187,0.42249999999999893,0.5970000000000012,0.2516666666666669,0.7983333333333346,0.28333333333333377,0.5575000000000007,0.2000000000000001,0.16666666666666688,0.6041666666666665,0.4333333333333338,0.4433333333333333,0.4969999999999997,0.4183333333333338,0.6150000000000001,0.3,0.6166666666666671,7.494005416219807e-16,0.11666666666666646,0.4708333333333337,0.5041666666666665,0.4399999999999997,0.6178333333333336,0.32666666666666694,0.735],"xaxis":"x","yaxis":"y","type":"histogram"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Score de Calidad"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"count"}},"legend":{"tracegroupgap":0},"title":{"text":"Distribuci\u00f3n del Score de Calidad"},"barmode":"relative"},                        {"responsive": true}                    )                };                            </script>        </div>
+</body>
+</html>
+        </div>
+
+        <div class="graph-container">
+            <html>
+<head><meta charset="utf-8" /></head>
+<body>
+    <div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>                <div id="graph2" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("graph2")) {                    Plotly.newPlot(                        "graph2",                        [{"alignmentgroup":"True","boxpoints":"all","hovertemplate":"Estilo=%{x}\u003cbr\u003eScore de Calidad=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Premium Lager","marker":{"color":"#636efa"},"name":"Premium Lager","notched":false,"offsetgroup":"Premium Lager","orientation":"v","showlegend":true,"x":["Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager","Premium Lager"],"x0":" ","xaxis":"x","y":[0.30119047619047656,0.10000000000000014,0.6855555555555553,0.11285714285714298,0.3833333333333335,0.3431944444444447,0.16730158730158728,0.23333333333333392,0.5212499999999998,0.38341269841269837,-4.4408920985006264e-17,0.35583333333333356,0.3073015873015878,0.22444444444444467,0.7583333333333337,0.14285714285714285,0.29055555555555534,0.22250000000000006,0.35119047619047644,0.2694444444444446,0.549444444444444,0.35119047619047644,0.07499999999999982,0.46305555555555517,0.09285714285714289,0.2833333333333334,0.5944444444444447,0.21730158730158713,0.28333333333333377,0.2474999999999996,0.25841269841269826,0.02499999999999988,0.6083333333333334,0.2623015873015878,0.14944444444444413,0.35583333333333356,0.042857142857142726,0.19055555555555562,0.42500000000000004,0.27619047619047665,0.19444444444444478,0.3431944444444442,0.37244047619047665,0.09625000000000003,0.7118055555555555,0.13910714285714307,0.32958333333333356,0.4044444444444447,0.2548015873015872,0.5930555555555552],"y0":" ","yaxis":"y","type":"box"},{"alignmentgroup":"True","boxpoints":"all","hovertemplate":"Estilo=%{x}\u003cbr\u003eScore de Calidad=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"IPA","marker":{"color":"#EF553B"},"name":"IPA","notched":false,"offsetgroup":"IPA","orientation":"v","showlegend":true,"x":["IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA","IPA"],"x0":" ","xaxis":"x","y":[0.22660714285714312,0.6072478991596632,0.4604761904761901,0.5985686274509806,0.8064733893557429,0.3426365546218487,0.4675238095238099,0.58391456582633,0.3929761904761899,0.46656862745098054,0.7265567226890761,0.5627615546218486,0.2923154761904765,0.5729264705882346,0.1974999999999995,0.7044257703081235,0.641568627450981,0.7170175070028009,0.09800000000000064,0.6657002801120442,0.3971666666666664,0.5576995798319331,0.5957352941176474,0.6481127450980392,0.3960476190476197,0.6487002801120441,0.1399999999999997,0.6985567226890761,0.41073529411764764,0.6531127450980391,0.3533333333333335,0.6748431372549013,0.14085714285714224,0.8234733893557424,0.6254019607843145,0.4035294117647061,0.33750000000000036,0.6123669467787107,0.4389047619047611,0.7636162464985997,0.4110924369747904,0.5915294117647061,0.20821428571428605,0.7180812324929964,0.3961904761904755,0.6997591036414569,0.5148067226890761,0.73358893557423,0.33716666666666656,0.39232142857142827],"y0":" ","yaxis":"y","type":"box"},{"alignmentgroup":"True","boxpoints":"all","hovertemplate":"Estilo=%{x}\u003cbr\u003eScore de Calidad=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Light Lager","marker":{"color":"#00cc96"},"name":"Light Lager","notched":false,"offsetgroup":"Light Lager","orientation":"v","showlegend":true,"x":["Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager","Light Lager"],"x0":" ","xaxis":"x","y":[0.16666666666666566,0.504166666666666,0.47083333333333305,0.320833333333333,0.6999999999999993,0.3833333333333331,0.35249999999999915,0.446999999999999,0.23166666666666613,0.5541666666666657,0.23333333333333212,0.43333333333333285,0.3999999999999997,0.2133333333333323,0.5499999999999993,0.283333333333332,0.6391666666666658,0.3211666666666659,0.339166666666666,0.4558333333333322,0.24999999999999908,0.6833333333333319,0.33333333333333187,0.1833333333333326,0.5666666666666655,0.33333333333333187,0.42249999999999893,0.5970000000000012,0.2516666666666669,0.7983333333333346,0.28333333333333377,0.5575000000000007,0.2000000000000001,0.16666666666666688,0.6041666666666665,0.4333333333333338,0.4433333333333333,0.4969999999999997,0.4183333333333338,0.6150000000000001,0.3,0.6166666666666671,7.494005416219807e-16,0.11666666666666646,0.4708333333333337,0.5041666666666665,0.4399999999999997,0.6178333333333336,0.32666666666666694,0.735],"y0":" ","yaxis":"y","type":"box"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Estilo"},"categoryorder":"array","categoryarray":["Premium Lager","IPA","Light Lager"]},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Score de Calidad"}},"legend":{"title":{"text":"Estilo"},"tracegroupgap":0},"title":{"text":"Score de Calidad por Estilo"},"boxmode":"overlay"},                        {"responsive": true}                    )                };                            </script>        </div>
+</body>
+</html>
+        </div>
+    </div>
+
+    <!-- NORMALIZACIÓN -->
+    <div class="section">
+        <h2>📏 Normalización de Datos</h2>
+        
+        <div class="conclusiones">
+            <h3>✅ StandardScaler Aplicado</h3>
+            <p>Se aplicó StandardScaler para normalizar todas las características a media 0 y desviación estándar 1.</p>
+            <p>Esto es crucial para redes neuronales porque:</p>
+            <ul>
+                <li>Acelera la convergencia del entrenamiento</li>
+                <li>Evita que variables con rangos grandes dominen el aprendizaje</li>
+                <li>Mejora la estabilidad numérica</li>
+                <li>Permite que todos los features contribuyan equitativamente</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- DIVISIÓN DE DATOS -->
+    <div class="section">
+        <h2>✂️ División de Datos</h2>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>104</h3>
+                <p>Train Original (70%)</p>
+            </div>
+            <div class="stat-card">
+                <h3>23</h3>
+                <p>Validation (15%)</p>
+            </div>
+            <div class="stat-card">
+                <h3>23</h3>
+                <p>Test (15%)</p>
+            </div>
+        </div>
+
+        <div class="graph-container">
+            <html>
+<head><meta charset="utf-8" /></head>
+<body>
+    <div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>                <div id="graph3" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("graph3")) {                    Plotly.newPlot(                        "graph3",                        [{"alignmentgroup":"True","hovertemplate":"Estilo=IPA\u003cbr\u003eSplit=%{x}\u003cbr\u003eCantidad=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"IPA","marker":{"color":"#636efa","pattern":{"shape":""}},"name":"IPA","offsetgroup":"IPA","orientation":"v","showlegend":true,"textposition":"auto","x":["Train","Val","Test"],"xaxis":"x","y":[35,8,7],"yaxis":"y","type":"bar"},{"alignmentgroup":"True","hovertemplate":"Estilo=Light Lager\u003cbr\u003eSplit=%{x}\u003cbr\u003eCantidad=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Light Lager","marker":{"color":"#EF553B","pattern":{"shape":""}},"name":"Light Lager","offsetgroup":"Light Lager","orientation":"v","showlegend":true,"textposition":"auto","x":["Train","Val","Test"],"xaxis":"x","y":[34,8,8],"yaxis":"y","type":"bar"},{"alignmentgroup":"True","hovertemplate":"Estilo=Premium Lager\u003cbr\u003eSplit=%{x}\u003cbr\u003eCantidad=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Premium Lager","marker":{"color":"#00cc96","pattern":{"shape":""}},"name":"Premium Lager","offsetgroup":"Premium Lager","orientation":"v","showlegend":true,"textposition":"auto","x":["Train","Val","Test"],"xaxis":"x","y":[35,7,8],"yaxis":"y","type":"bar"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Split"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Cantidad"}},"legend":{"title":{"text":"Estilo"},"tracegroupgap":0},"title":{"text":"Distribuci\u00f3n de Estilos por Conjunto (Antes de SMOTE)"},"barmode":"group"},                        {"responsive": true}                    )                };                            </script>        </div>
+</body>
+</html>
+        </div>
+
+        <div class="conclusiones">
+            <h3>📊 Estrategia de División:</h3>
+            <ul>
+                <li><strong>Train:</strong> Para entrenar el modelo (se le aplicará SMOTE)</li>
+                <li><strong>Validation:</strong> Para ajustar hiperparámetros y evitar overfitting</li>
+                <li><strong>Test:</strong> Para evaluación final (nunca visto por el modelo)</li>
+                <li><strong>División estratificada:</strong> Mantiene proporción de estilos en cada conjunto</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- DATA AUGMENTATION -->
+    <div class="section">
+        <h2>🔄 Data Augmentation con SMOTE 2x</h2>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>104</h3>
+                <p>Antes de SMOTE</p>
+            </div>
+            <div class="stat-card">
+                <h3>207</h3>
+                <p>Después de SMOTE</p>
+            </div>
+            <div class="stat-card">
+                <h3>+103</h3>
+                <p>Muestras Generadas</p>
+            </div>
+            <div class="stat-card">
+                <h3>1.99x</h3>
+                <p>Factor Multiplicador</p>
+            </div>
+        </div>
+
+        <div class="graph-container">
+            <html>
+<head><meta charset="utf-8" /></head>
+<body>
+    <div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>                <div id="graph4" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("graph4")) {                    Plotly.newPlot(                        "graph4",                        [{"alignmentgroup":"True","hovertemplate":"Momento=Antes SMOTE\u003cbr\u003eEstilo=%{x}\u003cbr\u003eCantidad=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Antes SMOTE","marker":{"color":"#ff7f0e","pattern":{"shape":""}},"name":"Antes SMOTE","offsetgroup":"Antes SMOTE","orientation":"v","showlegend":true,"textposition":"auto","x":["IPA","Light Lager","Premium Lager"],"xaxis":"x","y":[35,34,35],"yaxis":"y","type":"bar"},{"alignmentgroup":"True","hovertemplate":"Momento=Despu\u00e9s SMOTE 2x\u003cbr\u003eEstilo=%{x}\u003cbr\u003eCantidad=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Despu\u00e9s SMOTE 2x","marker":{"color":"#2ca02c","pattern":{"shape":""}},"name":"Despu\u00e9s SMOTE 2x","offsetgroup":"Despu\u00e9s SMOTE 2x","orientation":"v","showlegend":true,"textposition":"auto","x":["IPA","Light Lager","Premium Lager"],"xaxis":"x","y":[69,69,69],"yaxis":"y","type":"bar"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Estilo"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Cantidad"}},"legend":{"title":{"text":"Momento"},"tracegroupgap":0},"title":{"text":"Efecto de SMOTE 2x en el Conjunto de Entrenamiento"},"barmode":"group"},                        {"responsive": true}                    )                };                            </script>        </div>
+</body>
+</html>
+        </div>
+
+        <div class="conclusiones">
+            <h3>💡 ¿Qué es SMOTE?</h3>
+            <p><strong>SMOTE (Synthetic Minority Over-sampling Technique)</strong> genera nuevas muestras sintéticas 
+            interpolando entre muestras existentes del mismo estilo.</p>
+            <p><strong>Beneficios de SMOTE 2x:</strong></p>
+            <ul>
+                <li>✅ <strong>Duplica el dataset de entrenamiento</strong> de 104 a 207 muestras</li>
+                <li>✅ <strong>Reduce overfitting:</strong> Más datos = mejor generalización</li>
+                <li>✅ <strong>Mantiene el balance:</strong> Cada estilo tiene el mismo número de muestras</li>
+                <li>✅ <strong>Mejora la robustez:</strong> El modelo aprende de más variaciones</li>
+                <li>✅ <strong>Estándar de la industria:</strong> Práctica común con datasets pequeños</li>
+            </ul>
+        </div>
+
+        <div class="highlight">
+            <strong>⚠️ Importante:</strong> SMOTE solo se aplica al conjunto de ENTRENAMIENTO. 
+            Los conjuntos de validación y test se mantienen con datos 100% originales para 
+            evaluar correctamente la capacidad de generalización del modelo.
+        </div>
+    </div>
+
+    <!-- ARCHIVOS GENERADOS -->
+    <div class="section">
+        <h2>💾 Archivos Generados</h2>
+        
+        <table>
+            <tr>
+                <th>Archivo</th>
+                <th>Descripción</th>
+                <th>Dimensiones</th>
+            </tr>
+            <tr>
+                <td><strong>scaler.pkl</strong></td>
+                <td>StandardScaler entrenado</td>
+                <td>Para normalizar nuevos datos</td>
+            </tr>
+            <tr>
+                <td><strong>label_encoder.pkl</strong></td>
+                <td>Codificador de estilos</td>
+                <td>Mapeo: estilo ↔ número</td>
+            </tr>
+            <tr>
+                <td><strong>data/X_train.npy</strong></td>
+                <td>Características de entrenamiento (CON SMOTE)</td>
+                <td>207 × 6</td>
+            </tr>
+            <tr>
+                <td><strong>data/X_val.npy</strong></td>
+                <td>Características de validación (ORIGINAL)</td>
+                <td>23 × 6</td>
+            </tr>
+            <tr>
+                <td><strong>data/X_test.npy</strong></td>
+                <td>Características de prueba (ORIGINAL)</td>
+                <td>23 × 6</td>
+            </tr>
+            <tr>
+                <td><strong>data/y_style_*.npy</strong></td>
+                <td>Etiquetas de estilos (3 archivos)</td>
+                <td>Para clasificación</td>
+            </tr>
+            <tr>
+                <td><strong>data/y_quality_*.npy</strong></td>
+                <td>Scores de calidad (3 archivos)</td>
+                <td>Para regresión</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- CONCLUSIONES -->
+    <div class="section">
+        <h2>🎯 Conclusiones</h2>
+        
+        <div class="conclusiones">
+            <h3>✅ Preparación Exitosa</h3>
+            <ul>
+                <li>Dataset ampliado de 104 a 207 muestras de entrenamiento</li>
+                <li>Total de 253 muestras en todos los conjuntos</li>
+                <li>6 características por muestra (4 originales + 2 creadas)</li>
+                <li>2 objetivos: clasificación (estilo) + regresión (score calidad)</li>
+                <li>Datos normalizados y perfectamente balanceados</li>
+                <li>División estratificada manteniendo proporciones</li>
+            </ul>
+        </div>
+
+        <div class="conclusiones">
+            <h3>🚀 Ventajas de esta Preparación</h3>
+            <ul>
+                <li><strong>Más datos de entrenamiento:</strong> 2.0x más muestras para aprender patrones</li>
+                <li><strong>Mejor generalización:</strong> Reduce riesgo de overfitting</li>
+                <li><strong>Resultados más estables:</strong> Menor varianza entre entrenamientos</li>
+                <li><strong>Académicamente sólido:</strong> SMOTE es práctica estándar reconocida</li>
+            </ul>
+        </div>
+
+        </div>
+
+    <div class="footer">
+        <p>🍺 Sistema de Control de Calidad Cervecero - Valdivia, Chile</p>
+        <p>Fase 2: Preparación de Datos con SMOTE 2x</p>
+        <p>Noviembre 2025</p>
+    </div>
+</body>
+</html>
