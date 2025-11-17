@@ -1,6 +1,6 @@
 """
 APLICACIÓN STREAMLIT - SISTEMA INTELIGENTE PARA CERVECERÍAS
-VERSIÓN CLOUD (ONNX)
+VERSIÓN CLOUD (ONNX) - GRÁFICOS OPTIMIZADOS
 Interfaz web para usar los 3 modelos de Deep Learning
 TEMA: CERVECERÍA ARTESANAL
 """
@@ -433,34 +433,40 @@ def predecir_onnx(modelo, features):
     return modelo.run(None, {input_name: features.astype(np.float32)})[0]
 
 def crear_gauge_chart(valor, titulo, rango_min, rango_max):
-    """Crea un gráfico gauge con tema cervecero"""
+    """Crea un gráfico gauge con tema cervecero - COLORES VISIBLES"""
     fig = go.Figure(go.Indicator(
         mode="gauge+number",
         value=valor,
-        title={'text': titulo, 'font': {'color': '#F4A950', 'size': 20}},
-        number={'font': {'color': '#F4E4C1', 'size': 40}},
+        title={'text': titulo, 'font': {'color': '#2C1810', 'size': 24, 'weight': 'bold'}},
+        number={'font': {'color': '#2C1810', 'size': 48, 'weight': 'bold'}},
         gauge={
-            'axis': {'range': [rango_min, rango_max], 'tickcolor': '#F4A950'},
-            'bar': {'color': '#D4741D'},
-            'bgcolor': '#2C1810',
-            'borderwidth': 2,
-            'bordercolor': '#F4A950',
+            'axis': {
+                'range': [rango_min, rango_max], 
+                'tickcolor': '#2C1810', 
+                'tickfont': {'color': '#2C1810', 'size': 14, 'weight': 'bold'}
+            },
+            'bar': {'color': '#D4741D', 'thickness': 0.8},
+            'bgcolor': '#FFF8DC',
+            'borderwidth': 3,
+            'bordercolor': '#D4741D',
             'steps': [
-                {'range': [rango_min, rango_min + (rango_max-rango_min)*0.5], 'color': "#3A2318"},
-                {'range': [rango_min + (rango_max-rango_min)*0.5, rango_max], 'color': "#4A3020"}
+                {'range': [rango_min, rango_min + (rango_max-rango_min)*0.33], 'color': "#FFE4B5"},
+                {'range': [rango_min + (rango_max-rango_min)*0.33, rango_min + (rango_max-rango_min)*0.66], 'color': "#FFDAB9"},
+                {'range': [rango_min + (rango_max-rango_min)*0.66, rango_max], 'color': "#F4C2A0"}
             ],
             'threshold': {
-                'line': {'color': "#F4A950", 'width': 4},
-                'thickness': 0.75,
+                'line': {'color': "#8B4513", 'width': 5},
+                'thickness': 0.85,
                 'value': valor
             }
         }
     ))
     fig.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font={'color': '#F4E4C1'},
-        height=300
+        paper_bgcolor='#FFFFFF',
+        plot_bgcolor='#FFFFFF',
+        font={'color': '#2C1810', 'size': 14},
+        height=350,
+        margin=dict(l=20, r=20, t=60, b=20)
     )
     return fig
 
@@ -610,13 +616,30 @@ if "Modelo 1" in modelo_seleccionado:
                 
                 fig = px.bar(df_prob, x='Estilo', y='Probabilidad (%)',
                             color='Probabilidad (%)',
-                            color_continuous_scale=[[0, '#2C1810'], [0.5, '#D4741D'], [1, '#F4A950']])
+                            color_continuous_scale=[[0, '#8B4513'], [0.5, '#D4741D'], [1, '#F4A950']],
+                            text='Probabilidad (%)')
+                fig.update_traces(
+                    texttemplate='%{text:.1f}%',
+                    textposition='outside',
+                    textfont=dict(size=16, color='#2C1810', weight='bold')
+                )
                 fig.update_layout(
                     showlegend=False, 
                     height=400,
-                    paper_bgcolor='rgba(0,0,0,0)',
-                    plot_bgcolor='rgba(0,0,0,0)',
-                    font=dict(color='#F4E4C1')
+                    paper_bgcolor='#FFFFFF',
+                    plot_bgcolor='#FFFFFF',
+                    font=dict(color='#2C1810', size=14),
+                    xaxis=dict(
+                        title='',
+                        title_font=dict(size=16, color='#2C1810'),
+                        tickfont=dict(size=14, color='#2C1810', weight='bold')
+                    ),
+                    yaxis=dict(
+                        title='Probabilidad (%)',
+                        title_font=dict(size=16, color='#2C1810'),
+                        gridcolor='#E0E0E0',
+                        tickfont=dict(size=14, color='#2C1810', weight='bold')
+                    )
                 )
                 st.plotly_chart(fig, use_container_width=True)
             
@@ -777,15 +800,28 @@ elif "Modelo 3" in modelo_seleccionado:
                 labels=label_encoder.classes_,
                 values=prediccion[0] * 100,
                 hole=.3,
-                marker_colors=['#D4741D', '#F4A950', '#C46A1A']
+                marker_colors=['#D4741D', '#F4A950', '#C46A1A'],
+                textinfo='label+percent',
+                textfont=dict(size=16, color='#FFFFFF', weight='bold'),
+                hovertemplate='<b>%{label}</b><br>Similaridad: %{value:.1f}%<extra></extra>'
             )])
             
             fig.update_layout(
-                title="Distribución de Similaridad por Estilo",
-                height=400,
-                paper_bgcolor='rgba(0,0,0,0)',
-                plot_bgcolor='rgba(0,0,0,0)',
-                font=dict(color='#F4E4C1')
+                title=dict(
+                    text="Distribución de Similaridad por Estilo",
+                    font=dict(size=20, color='#2C1810', weight='bold')
+                ),
+                height=450,
+                paper_bgcolor='#FFFFFF',
+                plot_bgcolor='#FFFFFF',
+                font=dict(color='#2C1810', size=14),
+                showlegend=True,
+                legend=dict(
+                    font=dict(size=14, color='#2C1810', weight='bold'),
+                    bgcolor='#FFF8DC',
+                    bordercolor='#D4741D',
+                    borderwidth=2
+                )
             )
             
             st.plotly_chart(fig, use_container_width=True)
@@ -797,8 +833,17 @@ elif "Modelo 3" in modelo_seleccionado:
                 'Similaridad (%)': prediccion[0] * 100
             }).sort_values('Similaridad (%)', ascending=False)
             
-            st.dataframe(df_analisis.style.background_gradient(cmap='YlOrBr'), 
-                        use_container_width=True)
+            st.dataframe(
+                df_analisis.style.background_gradient(cmap='YlOrBr', vmin=0, vmax=100)
+                .format({'Similaridad (%)': '{:.2f}%'})
+                .set_properties(**{
+                    'color': '#2C1810',
+                    'font-weight': 'bold',
+                    'font-size': '16px'
+                }),
+                use_container_width=True,
+                height=200
+            )
             
             st.success("✅ **Recomendaciones:**")
             
@@ -826,11 +871,11 @@ elif "Modelo 3" in modelo_seleccionado:
 st.markdown("---")
 st.markdown('<div class="header-decoration"></div>', unsafe_allow_html=True)
 st.markdown("""
-<div style='text-align: center; color: #F4E4C1;'>
-    <p style='font-size: 18px; font-weight: bold; color: #F4A950;'>🍺 Sistema Inteligente para Cervecerías Artesanales</p>
-    <p>Valdivia, Chile</p>
-    <p>Desarrollado con Deep Learning (TensorFlow/Keras) • 3 Modelos Independientes</p>
-    <p>Dataset: 150 muestras → 253 con augmentation | Accuracy: 95%+ | R²: Positivo</p>
+<div style='text-align: center; color: #2C1810;'>
+    <p style='font-size: 18px; font-weight: bold; color: #D4741D;'>🍺 Sistema Inteligente para Cervecerías Artesanales</p>
+    <p style='color: #2C1810;'>Valdivia, Chile</p>
+    <p style='color: #2C1810;'>Desarrollado con Deep Learning (TensorFlow/Keras) • 3 Modelos Independientes</p>
+    <p style='color: #2C1810;'>Dataset: 150 muestras → 253 con augmentation | Accuracy: 95%+ | R²: Positivo</p>
     <p style='font-size: 14px; color: #D4741D;'>Noviembre 2025</p>
 </div>
 """, unsafe_allow_html=True)
