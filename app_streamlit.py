@@ -9,9 +9,14 @@ import numpy as np
 import pandas as pd
 import pickle
 import json
+
+# Import corregido para Streamlit Cloud
+import tensorflow as tf
 from tensorflow import keras
+
 import plotly.graph_objects as go
 import plotly.express as px
+
 
 # Configuración de la página
 st.set_page_config(
@@ -286,10 +291,10 @@ st.markdown("""
 @st.cache_resource
 def cargar_todo():
     """Carga modelos, encoders y métricas (se cachea para eficiencia)"""
-    # Modelos
-    modelo_1 = keras.models.load_model('modelos/modelo_1_control_calidad.h5')
-    modelo_2 = keras.models.load_model('modelos/modelo_2_predictor_abv.h5')
-    modelo_3 = keras.models.load_model('modelos/modelo_3_clasificador_experimental.h5')
+    # Modelos - usando tf.keras
+    modelo_1 = tf.keras.models.load_model('modelos/modelo_1_control_calidad.h5')
+    modelo_2 = tf.keras.models.load_model('modelos/modelo_2_predictor_abv.h5')
+    modelo_3 = tf.keras.models.load_model('modelos/modelo_3_clasificador_experimental.h5')
     
     # Encoders
     with open('scaler.pkl', 'rb') as f:
