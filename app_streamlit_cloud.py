@@ -654,11 +654,11 @@ if "Modelo 1" in modelo_seleccionado:
                 
                 st.success("✅ **Interpretación:**")
                 if confianza > 90:
-                    st.write(f"El lote corresponde claramente a un **{estilo}**.")
+                    st.write(f"El lote corresponde claramente a una **{estilo}**.")
                 elif confianza > 70:
-                    st.write(f"El lote es probablemente un **{estilo}**, con buena confianza.")
+                    st.write(f"El lote es probablemente una **{estilo}**, con buena confianza.")
                 else:
-                    st.warning(f"El lote podría ser un **{estilo}**, pero hay incertidumbre. Revisar parámetros.")
+                    st.warning(f"El lote podría ser una **{estilo}**, pero hay incertidumbre. Revisar parámetros.")
 
 # ============================================
 # MODELO 2: PREDICTOR DE ABV
@@ -840,48 +840,45 @@ elif "Modelo 3" in modelo_seleccionado:
             
             st.plotly_chart(fig, use_container_width=True)
             
-            # TABLA MEJORADA CON MEJOR CONTRASTE
             st.subheader("📋 Detalle por Estilo")
-            
+
             df_analisis = pd.DataFrame({
                 'Estilo': label_encoder.classes_,
                 'Similaridad (%)': prediccion[0] * 100
-            }).sort_values('Similaridad (%)', ascending=False)
-            
+            }).sort_values('Similaridad (%)', ascending=False).reset_index(drop=True)
+
             # Agregar ranking
-            df_analisis.insert(0, 'Ranking', ['🥇', '🥈', '🥉'][:len(df_analisis)])
-            
-            # Función para colorear con MEJOR CONTRASTE
-            def colorear_fila(row):
+            rankings = ['🥇 Primero', '🥈 Segundo', '🥉 Tercero']
+            df_analisis.insert(0, 'Posición', rankings[:len(df_analisis)])
+
+            # Colorear con NEGRO para alto contraste
+            def colorear_tabla(row):
                 val = row['Similaridad (%)']
+    
                 if val > 70:
-                    # Naranja OSCURO con texto BLANCO
                     return [
-                        'background-color: #D4741D; color: #FFFFFF; font-weight: bold; font-size: 20px; text-align: center; padding: 15px; border: 2px solid #2C1810;',
-                        'background-color: #D4741D; color: #FFFFFF; font-weight: bold; font-size: 20px; text-align: left; padding: 15px; border: 2px solid #2C1810;',
-                        'background-color: #D4741D; color: #FFFFFF; font-weight: bold; font-size: 24px; text-align: right; padding: 15px; border: 2px solid #2C1810;'
-                    ]
+                        'background-color: #C85A17; color: #FFFFFF; font-weight: bold; font-size: 20px; text-align: center; padding: 20px; border: 3px solid #000000;',
+                        'background-color: #C85A17; color: #FFFFFF; font-weight: bold; font-size: 20px; text-align: left; padding: 20px; border: 3px solid #000000;',
+                        'background-color: #C85A17; color: #FFFFFF; font-weight: bold; font-size: 28px; text-align: right; padding: 20px; border: 3px solid #000000;'
+            ]
                 elif val > 30:
-                    # Naranja MEDIO con texto OSCURO
                     return [
-                        'background-color: #F4A950; color: #2C1810; font-weight: bold; font-size: 20px; text-align: center; padding: 15px; border: 2px solid #2C1810;',
-                        'background-color: #F4A950; color: #2C1810; font-weight: bold; font-size: 20px; text-align: left; padding: 15px; border: 2px solid #2C1810;',
-                        'background-color: #F4A950; color: #2C1810; font-weight: bold; font-size: 24px; text-align: right; padding: 15px; border: 2px solid #2C1810;'
-                    ]
+                        'background-color: #F4A950; color: #000000; font-weight: bold; font-size: 20px; text-align: center; padding: 20px; border: 3px solid #000000;',
+                        'background-color: #F4A950; color: #000000; font-weight: bold; font-size: 20px; text-align: left; padding: 20px; border: 3px solid #000000;',
+                        'background-color: #F4A950; color: #000000; font-weight: bold; font-size: 28px; text-align: right; padding: 20px; border: 3px solid #000000;'
+            ]
                 else:
-                    # Amarillo CLARO con texto OSCURO
                     return [
-                        'background-color: #FFE4B5; color: #2C1810; font-weight: bold; font-size: 20px; text-align: center; padding: 15px; border: 2px solid #2C1810;',
-                        'background-color: #FFE4B5; color: #2C1810; font-weight: bold; font-size: 20px; text-align: left; padding: 15px; border: 2px solid #2C1810;',
-                        'background-color: #FFE4B5; color: #2C1810; font-weight: bold; font-size: 24px; text-align: right; padding: 15px; border: 2px solid #2C1810;'
-                    ]
-            
+                        'background-color: #FFD89C; color: #000000; font-weight: bold; font-size: 20px; text-align: center; padding: 20px; border: 3px solid #000000;',
+                        'background-color: #FFD89C; color: #000000; font-weight: bold; font-size: 20px; text-align: left; padding: 20px; border: 3px solid #000000;',
+                        'background-color: #FFD89C; color: #000000; font-weight: bold; font-size: 28px; text-align: right; padding: 20px; border: 3px solid #000000;'
+            ]
+
             st.dataframe(
-                df_analisis.style
-                .apply(colorear_fila, axis=1)
-                .format({'Similaridad (%)': '{:.2f}%'}),
+                df_analisis.style.apply(colorear_tabla, axis=1).format({'Similaridad (%)': '{:.2f}%'}),
                 use_container_width=True,
-                height=250
+                height=240,
+                hide_index=True
             )
             
             st.success("✅ **Recomendaciones:**")
@@ -890,10 +887,10 @@ elif "Modelo 3" in modelo_seleccionado:
                                  key=lambda x: x[1], reverse=True)
             
             if probs_sorted[0][1] > 0.8:
-                st.write(f"✅ Tu receta es claramente un **{probs_sorted[0][0]}**. "
+                st.write(f"✅ Tu receta es claramente una **{probs_sorted[0][0]}**. "
                         "Puedes comercializarla con ese nombre.")
             elif probs_sorted[0][1] > 0.6:
-                st.write(f"✅ Tu receta se parece más a un **{probs_sorted[0][0]}**, "
+                st.write(f"✅ Tu receta se parece más a una **{probs_sorted[0][0]}**, "
                         "aunque tiene características de otros estilos.")
             else:
                 st.write(f"🎨 Tu receta es **híbrida**, con características de:")
