@@ -845,43 +845,55 @@ elif "Modelo 3" in modelo_seleccionado:
             df_analisis = pd.DataFrame({
                 'Estilo': label_encoder.classes_,
                 'Similaridad (%)': prediccion[0] * 100
-            }).sort_values('Similaridad (%)', ascending=False).reset_index(drop=True)
+            }).sort_values('Similaridad (%)', ascending=False)
 
-            # Agregar ranking
-            rankings = ['🥇 Primero', '🥈 Segundo', '🥉 Tercero']
-            df_analisis.insert(0, 'Posición', rankings[:len(df_analisis)])
+            rankings = ['🥇', '🥈', '🥉']
 
-            # Colorear con NEGRO para alto contraste
-            def colorear_tabla(row):
-                val = row['Similaridad (%)']
+            # Crear 3 columnas para las tarjetas
+            cols = st.columns(3)
+
+            for idx, (_, row) in enumerate(df_analisis.iterrows()):
+                estilo = row['Estilo']
+                sim = row['Similaridad (%)']
+                ranking = rankings[idx]
     
-                if val > 70:
-                    return [
-                        'background-color: #C85A17; color: #FFFFFF; font-weight: bold; font-size: 20px; text-align: center; padding: 20px; border: 3px solid #000000;',
-                        'background-color: #C85A17; color: #FFFFFF; font-weight: bold; font-size: 20px; text-align: left; padding: 20px; border: 3px solid #000000;',
-                        'background-color: #C85A17; color: #FFFFFF; font-weight: bold; font-size: 28px; text-align: right; padding: 20px; border: 3px solid #000000;'
-            ]
-                elif val > 30:
-                    return [
-                        'background-color: #F4A950; color: #000000; font-weight: bold; font-size: 20px; text-align: center; padding: 20px; border: 3px solid #000000;',
-                        'background-color: #F4A950; color: #000000; font-weight: bold; font-size: 20px; text-align: left; padding: 20px; border: 3px solid #000000;',
-                        'background-color: #F4A950; color: #000000; font-weight: bold; font-size: 28px; text-align: right; padding: 20px; border: 3px solid #000000;'
-            ]
+                # Definir colores según posición
+                if idx == 0:
+                    bg_color = '#C85A17'  # Naranja oscuro
+                    text_color = '#FFFFFF'
+                    border = '4px solid #8B3410'
+                elif idx == 1:
+                    bg_color = '#F4A950'  # Naranja medio
+                    text_color = '#000000'
+                    border = '4px solid #D4741D'
                 else:
-                    return [
-                        'background-color: #FFD89C; color: #000000; font-weight: bold; font-size: 20px; text-align: center; padding: 20px; border: 3px solid #000000;',
-                        'background-color: #FFD89C; color: #000000; font-weight: bold; font-size: 20px; text-align: left; padding: 20px; border: 3px solid #000000;',
-                        'background-color: #FFD89C; color: #000000; font-weight: bold; font-size: 28px; text-align: right; padding: 20px; border: 3px solid #000000;'
-            ]
-
-            st.dataframe(
-                df_analisis.style.apply(colorear_tabla, axis=1).format({'Similaridad (%)': '{:.2f}%'}),
-                use_container_width=True,
-                height=240,
-                hide_index=True
-            )
+                    bg_color = '#FFD89C'  # Beige
+                    text_color = '#000000'
+                    border = '4px solid #F4A950'
+    
+                with cols[idx]:
+                    st.markdown(f"""
+                        <div style='
+                        background: {bg_color};
+                        color: {text_color};
+                        padding: 25px;
+                        border-radius: 15px;
+                        border: {border};
+                        box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+                        text-align: center;
+                        min-height: 180px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                    '>
+                        <div style='font-size: 48px; margin-bottom: 10px;'>{ranking}</div>
+                        <div style='font-size: 20px; font-weight: bold; margin-bottom: 15px;'>{estilo}</div>
+                        <div style='font-size: 36px; font-weight: bold;'>{sim:.2f}%</div>
+                        <div style='font-size: 14px; margin-top: 8px; opacity: 0.9;'>Similaridad</div>
+                        </div>
+        """, unsafe_allow_html=True)
             
-            st.success("✅ **Recomendaciones:**")
+            st.success("**Recomendaciones:**")
             
             probs_sorted = sorted(zip(label_encoder.classes_, prediccion[0]), 
                                  key=lambda x: x[1], reverse=True)
