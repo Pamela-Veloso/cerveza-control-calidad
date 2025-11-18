@@ -1,6 +1,6 @@
 """
 APLICACIÓN STREAMLIT - SISTEMA INTELIGENTE PARA CERVECERÍAS
-VERSIÓN CLOUD (ONNX) - GRÁFICOS OPTIMIZADOS
+VERSIÓN CLOUD (ONNX) - OPTIMIZADA
 Interfaz web para usar los 3 modelos de Deep Learning
 TEMA: CERVECERÍA ARTESANAL
 """
@@ -608,22 +608,22 @@ if "Modelo 1" in modelo_seleccionado:
             
             with col1:
                 st.subheader("📊 Probabilidades por Estilo")
-    
+                
                 df_prob = pd.DataFrame({
                     'Estilo': label_encoder.classes_,
                     'Probabilidad (%)': prediccion[0] * 100
                 })
-    
-                # Crear gráfico SIN mostrar el valor en la barra
+                
+                # Gráfico limpio sin texto en barras
                 fig = px.bar(df_prob, x='Estilo', y='Probabilidad (%)',
-                    color='Probabilidad (%)',
-                    color_continuous_scale=[[0, '#8B4513'], [0.5, '#D4741D'], [1, '#F4A950']])
-    
+                            color='Probabilidad (%)',
+                            color_continuous_scale=[[0, '#8B4513'], [0.5, '#D4741D'], [1, '#F4A950']])
+                
                 fig.update_traces(
-                    texttemplate='',  # ← SIN TEXTO EN LAS BARRAS
+                    texttemplate='',
                     hovertemplate='<b>%{x}</b><br>Probabilidad: %{y:.1f}%<extra></extra>'
                 )
-    
+                
                 fig.update_layout(
                     showlegend=False, 
                     height=400,
@@ -798,29 +798,29 @@ elif "Modelo 3" in modelo_seleccionado:
             
             st.subheader("📊 Análisis Probabilístico Completo")
             
-            # Colores BIEN DIFERENCIADOS
-            colores_distintos = ['#D4741D', '#8B4513', '#FFB347']  # Naranja, Café, Naranja claro
-
+            # Colores bien diferenciados
+            colores_distintos = ['#D4741D', '#8B4513', '#FFB347']
+            
             fig = go.Figure(data=[go.Pie(
                 labels=label_encoder.classes_,
                 values=prediccion[0] * 100,
                 hole=.3,
                 marker=dict(
-                colors=colores_distintos,
-                line=dict(color='#FFFFFF', width=3)  # ← Borde blanco para separar
-            ),
+                    colors=colores_distintos,
+                    line=dict(color='#FFFFFF', width=3)
+                ),
                 textinfo='label+percent',
                 textfont=dict(size=18, color='#FFFFFF', weight='bold'),
                 hovertemplate='<b>%{label}</b><br>Similaridad: %{value:.1f}%<extra></extra>',
-                pull=[0.05, 0.05, 0.05]  # ← Separa las porciones ligeramente
+                pull=[0.05, 0.05, 0.05]
             )])
-
+            
             fig.update_layout(
                 title=dict(
-                text="Distribución de Similaridad por Estilo",
-                font=dict(size=20, color='#2C1810', weight='bold')
-            ),
-                height=500,  # ← Más grande
+                    text="Distribución de Similaridad por Estilo",
+                    font=dict(size=20, color='#2C1810', weight='bold')
+                ),
+                height=500,
                 paper_bgcolor='#FFFFFF',
                 plot_bgcolor='#FFFFFF',
                 font=dict(color='#2C1810', size=14),
@@ -840,38 +840,48 @@ elif "Modelo 3" in modelo_seleccionado:
             
             st.plotly_chart(fig, use_container_width=True)
             
+            # TABLA MEJORADA CON MEJOR CONTRASTE
             st.subheader("📋 Detalle por Estilo")
-
+            
             df_analisis = pd.DataFrame({
                 'Estilo': label_encoder.classes_,
                 'Similaridad (%)': prediccion[0] * 100
             }).sort_values('Similaridad (%)', ascending=False)
-
+            
+            # Agregar ranking
+            df_analisis.insert(0, 'Ranking', ['🥇', '🥈', '🥉'][:len(df_analisis)])
+            
             # Función para colorear con MEJOR CONTRASTE
             def colorear_fila(row):
                 val = row['Similaridad (%)']
                 if val > 70:
-                    bg_color = '#D4741D'  # Naranja oscuro
-                    text_color = '#FFFFFF'  # Texto blanco
+                    # Naranja OSCURO con texto BLANCO
+                    return [
+                        'background-color: #D4741D; color: #FFFFFF; font-weight: bold; font-size: 20px; text-align: center; padding: 15px; border: 2px solid #2C1810;',
+                        'background-color: #D4741D; color: #FFFFFF; font-weight: bold; font-size: 20px; text-align: left; padding: 15px; border: 2px solid #2C1810;',
+                        'background-color: #D4741D; color: #FFFFFF; font-weight: bold; font-size: 24px; text-align: right; padding: 15px; border: 2px solid #2C1810;'
+                    ]
                 elif val > 30:
-                    bg_color = '#F4A950'  # Naranja medio
-                    text_color = '#2C1810'  # Texto oscuro
+                    # Naranja MEDIO con texto OSCURO
+                    return [
+                        'background-color: #F4A950; color: #2C1810; font-weight: bold; font-size: 20px; text-align: center; padding: 15px; border: 2px solid #2C1810;',
+                        'background-color: #F4A950; color: #2C1810; font-weight: bold; font-size: 20px; text-align: left; padding: 15px; border: 2px solid #2C1810;',
+                        'background-color: #F4A950; color: #2C1810; font-weight: bold; font-size: 24px; text-align: right; padding: 15px; border: 2px solid #2C1810;'
+                    ]
                 else:
-                    bg_color = '#FFE4B5'  # Amarillo claro
-                    text_color = '#2C1810'  # Texto oscuro
-    
-                return [f'background-color: {bg_color}; color: {text_color}; font-weight: bold; font-size: 18px; padding: 12px;'] * len(row)
-
+                    # Amarillo CLARO con texto OSCURO
+                    return [
+                        'background-color: #FFE4B5; color: #2C1810; font-weight: bold; font-size: 20px; text-align: center; padding: 15px; border: 2px solid #2C1810;',
+                        'background-color: #FFE4B5; color: #2C1810; font-weight: bold; font-size: 20px; text-align: left; padding: 15px; border: 2px solid #2C1810;',
+                        'background-color: #FFE4B5; color: #2C1810; font-weight: bold; font-size: 24px; text-align: right; padding: 15px; border: 2px solid #2C1810;'
+                    ]
+            
             st.dataframe(
                 df_analisis.style
                 .apply(colorear_fila, axis=1)
-                .format({'Similaridad (%)': '{:.2f}%'})
-                .set_properties(**{
-                'text-align': 'center',
-                'border': '2px solid #D4741D'
-                }),
+                .format({'Similaridad (%)': '{:.2f}%'}),
                 use_container_width=True,
-                height=220
+                height=250
             )
             
             st.success("✅ **Recomendaciones:**")
