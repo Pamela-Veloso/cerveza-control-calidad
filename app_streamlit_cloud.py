@@ -620,12 +620,12 @@ if "Modelo 1" in modelo_seleccionado:
                             text='Probabilidad (%)')
                 fig.update_traces(
                     texttemplate='%{text:.1f}%',
-                    textposition='outside',
-                    textfont=dict(size=16, color='#2C1810', weight='bold')
+                    textposition='inside',  # ← CAMBIO: dentro de las barras
+                    textfont=dict(size=18, color='#FFFFFF', weight='bold')  # ← Blanco para que se vea
                 )
                 fig.update_layout(
                     showlegend=False, 
-                    height=400,
+                    height=450,  # ← Más alto
                     paper_bgcolor='#FFFFFF',
                     plot_bgcolor='#FFFFFF',
                     font=dict(color='#2C1810', size=14),
@@ -638,7 +638,8 @@ if "Modelo 1" in modelo_seleccionado:
                         title='Probabilidad (%)',
                         title_font=dict(size=16, color='#2C1810'),
                         gridcolor='#E0E0E0',
-                        tickfont=dict(size=14, color='#2C1810', weight='bold')
+                        tickfont=dict(size=14, color='#2C1810', weight='bold'),
+                        range=[0, 105]  # ← IMPORTANTE: espacio extra arriba
                     )
                 )
                 st.plotly_chart(fig, use_container_width=True)
@@ -796,28 +797,40 @@ elif "Modelo 3" in modelo_seleccionado:
             
             st.subheader("📊 Análisis Probabilístico Completo")
             
+            # Colores BIEN DIFERENCIADOS
+            colores_distintos = ['#D4741D', '#8B4513', '#FFB347']  # Naranja, Café, Naranja claro
+
             fig = go.Figure(data=[go.Pie(
                 labels=label_encoder.classes_,
                 values=prediccion[0] * 100,
                 hole=.3,
-                marker_colors=['#D4741D', '#F4A950', '#C46A1A'],
+                marker=dict(
+                colors=colores_distintos,
+                line=dict(color='#FFFFFF', width=3)  # ← Borde blanco para separar
+            ),
                 textinfo='label+percent',
-                textfont=dict(size=16, color='#FFFFFF', weight='bold'),
-                hovertemplate='<b>%{label}</b><br>Similaridad: %{value:.1f}%<extra></extra>'
+                textfont=dict(size=18, color='#FFFFFF', weight='bold'),
+                hovertemplate='<b>%{label}</b><br>Similaridad: %{value:.1f}%<extra></extra>',
+                pull=[0.05, 0.05, 0.05]  # ← Separa las porciones ligeramente
             )])
-            
+
             fig.update_layout(
                 title=dict(
-                    text="Distribución de Similaridad por Estilo",
-                    font=dict(size=20, color='#2C1810', weight='bold')
-                ),
-                height=450,
+                text="Distribución de Similaridad por Estilo",
+                font=dict(size=20, color='#2C1810', weight='bold')
+            ),
+                height=500,  # ← Más grande
                 paper_bgcolor='#FFFFFF',
                 plot_bgcolor='#FFFFFF',
                 font=dict(color='#2C1810', size=14),
                 showlegend=True,
                 legend=dict(
-                    font=dict(size=14, color='#2C1810', weight='bold'),
+                    orientation="v",
+                    yanchor="middle",
+                    y=0.5,
+                    xanchor="left",
+                    x=1.1,
+                    font=dict(size=16, color='#2C1810', weight='bold'),
                     bgcolor='#FFF8DC',
                     bordercolor='#D4741D',
                     borderwidth=2
@@ -833,14 +846,20 @@ elif "Modelo 3" in modelo_seleccionado:
                 'Similaridad (%)': prediccion[0] * 100
             }).sort_values('Similaridad (%)', ascending=False)
             
+            # Colorear manualmente según valor
+            def colorear_fila(row):
+                val = row['Similaridad (%)']
+                if val > 70:
+                    color = '#FFB347'  # Naranja claro
+                elif val > 30:
+                    color = '#FFDAB9'  # Melocotón
+                else:
+                    color = '#FFE4B5'  # Amarillo claro
+                return [f'background-color: {color}; color: #2C1810; font-weight: bold; font-size: 16px'] * len(row)
+
             st.dataframe(
-                df_analisis.style.background_gradient(cmap='YlOrBr', vmin=0, vmax=100)
-                .format({'Similaridad (%)': '{:.2f}%'})
-                .set_properties(**{
-                    'color': '#2C1810',
-                    'font-weight': 'bold',
-                    'font-size': '16px'
-                }),
+                df_analisis.style.apply(colorear_fila, axis=1)
+                .format({'Similaridad (%)': '{:.2f}%'}),
                 use_container_width=True,
                 height=200
             )
