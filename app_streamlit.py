@@ -1,5 +1,6 @@
 """
 APLICACIÓN STREAMLIT - SISTEMA INTELIGENTE PARA CERVECERÍAS
+VERSIÓN LOCAL (TensorFlow)
 Interfaz web para usar los 3 modelos de Deep Learning
 TEMA: CERVECERÍA ARTESANAL
 """
@@ -10,13 +11,12 @@ import pandas as pd
 import pickle
 import json
 
-# Import corregido para Streamlit Cloud
+# Import TensorFlow para versión local
 import tensorflow as tf
 from tensorflow import keras
 
 import plotly.graph_objects as go
 import plotly.express as px
-
 
 # Configuración de la página
 st.set_page_config(
@@ -26,7 +26,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# CSS PERSONALIZADO - TEMA CERVECERO 
+# CSS PERSONALIZADO - TEMA CERVECERO (IGUAL QUE CLOUD)
 st.markdown("""
     <style>
     /* FONDO PRINCIPAL - BLANCO/CREMA */
@@ -60,7 +60,6 @@ st.markdown("""
         color: #F4E4C1 !important;
     }
     
-  
     /* TÍTULOS */
     h1 {
         color: #2C1810 !important;
@@ -154,51 +153,52 @@ st.markdown("""
         fill: #D4741D !important;
     }
     
-/* INFO/SUCCESS/WARNING/ERROR BOXES - ÁREA PRINCIPAL */
-.stAlert, [data-testid="stNotification"] {
-    background-color: #FFFFFF !important;
-    color: #2C1810 !important;
-    border: 2px solid #D4741D !important;
-    border-radius: 8px;
-}
+    /* INFO/SUCCESS/WARNING/ERROR BOXES - ÁREA PRINCIPAL */
+    .stAlert, [data-testid="stNotification"] {
+        background-color: #FFFFFF !important;
+        color: #2C1810 !important;
+        border: 2px solid #D4741D !important;
+        border-radius: 8px;
+    }
 
-.stSuccess {
-    background-color: #F1F8F4 !important;
-    border-left: 5px solid #4CAF50 !important;
-    color: #2C1810 !important;
-}
+    .stSuccess {
+        background-color: #F1F8F4 !important;
+        border-left: 5px solid #4CAF50 !important;
+        color: #2C1810 !important;
+    }
 
-.stWarning {
-    background-color: #FFF8F0 !important;
-    border-left: 5px solid #FF9800 !important;
-    color: #2C1810 !important;
-}
+    .stWarning {
+        background-color: #FFF8F0 !important;
+        border-left: 5px solid #FF9800 !important;
+        color: #2C1810 !important;
+    }
 
-.stError {
-    background-color: #FFF5F5 !important;
-    border-left: 5px solid #F44336 !important;
-    color: #2C1810 !important;
-}
+    .stError {
+        background-color: #FFF5F5 !important;
+        border-left: 5px solid #F44336 !important;
+        color: #2C1810 !important;
+    }
 
-.stInfo {
-    background-color: #F0F8FF !important;
-    border-left: 5px solid #2196F3 !important;
-    color: #2C1810 !important;
-}
+    .stInfo {
+        background-color: #F0F8FF !important;
+        border-left: 5px solid #2196F3 !important;
+        color: #2C1810 !important;
+    }
 
-/* INFO BOXES ESPECÍFICAMENTE EN SIDEBAR */
-[data-testid="stSidebar"] .stAlert,
-[data-testid="stSidebar"] .stInfo {
-    background-color: #FFF8DC !important;
-    border: 2px solid #F4A950 !important;
-    border-left: 5px solid #F4A950 !important;
-}
+    /* INFO BOXES ESPECÍFICAMENTE EN SIDEBAR */
+    [data-testid="stSidebar"] .stAlert,
+    [data-testid="stSidebar"] .stInfo {
+        background-color: #FFF8DC !important;
+        border: 2px solid #F4A950 !important;
+        border-left: 5px solid #F4A950 !important;
+    }
 
-/* FORZAR TEXTO OSCURO EN INFO BOXES DEL SIDEBAR */
-[data-testid="stSidebar"] .stAlert *,
-[data-testid="stSidebar"] .stInfo * {
-    color: #2C1810 !important;
-}
+    /* FORZAR TEXTO OSCURO EN INFO BOXES DEL SIDEBAR */
+    [data-testid="stSidebar"] .stAlert *,
+    [data-testid="stSidebar"] .stInfo * {
+        color: #2C1810 !important;
+    }
+    
     /* MÉTRICAS DE STREAMLIT */
     [data-testid="stMetricValue"] {
         color: #D4741D !important;
@@ -290,10 +290,9 @@ st.markdown("""
 
 @st.cache_resource
 def cargar_todo():
-    """Carga modelos, encoders y métricas (se cachea para eficiencia)"""
-    import tensorflow as tf
+    """Carga modelos TensorFlow, encoders y métricas (se cachea para eficiencia)"""
     
-    # Modelos - método compatible con todas las versiones
+    # Modelos TensorFlow
     modelo_1 = tf.keras.models.load_model('modelos/modelo_1_control_calidad.h5', compile=False)
     modelo_2 = tf.keras.models.load_model('modelos/modelo_2_predictor_abv.h5', compile=False)
     modelo_3 = tf.keras.models.load_model('modelos/modelo_3_clasificador_experimental.h5', compile=False)
@@ -430,34 +429,40 @@ def normalizar_inputs(og, abv, ph, ibu):
     return features_norm
 
 def crear_gauge_chart(valor, titulo, rango_min, rango_max):
-    """Crea un gráfico gauge con tema cervecero"""
+    """Crea un gráfico gauge con tema cervecero - COLORES VISIBLES"""
     fig = go.Figure(go.Indicator(
         mode="gauge+number",
         value=valor,
-        title={'text': titulo, 'font': {'color': '#F4A950', 'size': 20}},
-        number={'font': {'color': '#F4E4C1', 'size': 40}},
+        title={'text': titulo, 'font': {'color': '#2C1810', 'size': 24}},
+        number={'font': {'color': '#2C1810', 'size': 48}},
         gauge={
-            'axis': {'range': [rango_min, rango_max], 'tickcolor': '#F4A950'},
-            'bar': {'color': '#D4741D'},
-            'bgcolor': '#2C1810',
-            'borderwidth': 2,
-            'bordercolor': '#F4A950',
+            'axis': {
+                'range': [rango_min, rango_max], 
+                'tickcolor': '#2C1810', 
+                'tickfont': {'color': '#2C1810', 'size': 14}
+            },
+            'bar': {'color': '#D4741D', 'thickness': 0.8},
+            'bgcolor': '#FFF8DC',
+            'borderwidth': 3,
+            'bordercolor': '#D4741D',
             'steps': [
-                {'range': [rango_min, rango_min + (rango_max-rango_min)*0.5], 'color': "#3A2318"},
-                {'range': [rango_min + (rango_max-rango_min)*0.5, rango_max], 'color': "#4A3020"}
+                {'range': [rango_min, rango_min + (rango_max-rango_min)*0.33], 'color': "#FFE4B5"},
+                {'range': [rango_min + (rango_max-rango_min)*0.33, rango_min + (rango_max-rango_min)*0.66], 'color': "#FFDAB9"},
+                {'range': [rango_min + (rango_max-rango_min)*0.66, rango_max], 'color': "#F4C2A0"}
             ],
             'threshold': {
-                'line': {'color': "#F4A950", 'width': 4},
-                'thickness': 0.75,
+                'line': {'color': "#8B4513", 'width': 5},
+                'thickness': 0.85,
                 'value': valor
             }
         }
     ))
     fig.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font={'color': '#F4E4C1'},
-        height=300
+        paper_bgcolor='#FFFFFF',
+        plot_bgcolor='#FFFFFF',
+        font={'color': '#2C1810', 'size': 14},
+        height=350,
+        margin=dict(l=20, r=20, t=60, b=20)
     )
     return fig
 
@@ -605,15 +610,34 @@ if "Modelo 1" in modelo_seleccionado:
                     'Probabilidad (%)': prediccion[0] * 100
                 })
                 
+                # Gráfico limpio sin texto en barras
                 fig = px.bar(df_prob, x='Estilo', y='Probabilidad (%)',
                             color='Probabilidad (%)',
-                            color_continuous_scale=[[0, '#2C1810'], [0.5, '#D4741D'], [1, '#F4A950']])
+                            color_continuous_scale=[[0, '#8B4513'], [0.5, '#D4741D'], [1, '#F4A950']])
+                
+                fig.update_traces(
+                    texttemplate='',
+                    hovertemplate='<b>%{x}</b><br>Probabilidad: %{y:.1f}%<extra></extra>'
+                )
+                
                 fig.update_layout(
                     showlegend=False, 
                     height=400,
-                    paper_bgcolor='rgba(0,0,0,0)',
-                    plot_bgcolor='rgba(0,0,0,0)',
-                    font=dict(color='#F4E4C1')
+                    paper_bgcolor='#FFFFFF',
+                    plot_bgcolor='#FFFFFF',
+                    font=dict(color='#2C1810', size=14),
+                    xaxis=dict(
+                        title='Estilo de Cerveza',
+                        title_font=dict(size=16, color='#2C1810'),
+                        tickfont=dict(size=14, color='#2C1810')
+                    ),
+                    yaxis=dict(
+                        title='Probabilidad (%)',
+                        title_font=dict(size=16, color='#2C1810'),
+                        gridcolor='#E0E0E0',
+                        tickfont=dict(size=14, color='#2C1810'),
+                        range=[0, 105]
+                    )
                 )
                 st.plotly_chart(fig, use_container_width=True)
             
@@ -626,11 +650,11 @@ if "Modelo 1" in modelo_seleccionado:
                 
                 st.success("✅ **Interpretación:**")
                 if confianza > 90:
-                    st.write(f"El lote corresponde claramente a un **{estilo}**.")
+                    st.write(f"El lote corresponde claramente a una **{estilo}**.")
                 elif confianza > 70:
-                    st.write(f"El lote es probablemente un **{estilo}**, con buena confianza.")
+                    st.write(f"El lote es probablemente una **{estilo}**, con buena confianza.")
                 else:
-                    st.warning(f"El lote podría ser un **{estilo}**, pero hay incertidumbre. Revisar parámetros.")
+                    st.warning(f"El lote podría ser una **{estilo}**, pero hay incertidumbre. Revisar parámetros.")
 
 # ============================================
 # MODELO 2: PREDICTOR DE ABV
@@ -770,32 +794,101 @@ elif "Modelo 3" in modelo_seleccionado:
             
             st.subheader("📊 Análisis Probabilístico Completo")
             
+            # Colores bien diferenciados
+            colores_distintos = ['#D4741D', '#8B4513', '#FFB347']
+            
             fig = go.Figure(data=[go.Pie(
                 labels=label_encoder.classes_,
                 values=prediccion[0] * 100,
                 hole=.3,
-                marker_colors=['#D4741D', '#F4A950', '#C46A1A']
+                marker=dict(
+                    colors=colores_distintos,
+                    line=dict(color='#FFFFFF', width=3)
+                ),
+                textinfo='label+percent',
+                textfont=dict(size=18, color='#FFFFFF'),
+                hovertemplate='<b>%{label}</b><br>Similaridad: %{value:.1f}%<extra></extra>',
+                pull=[0.05, 0.05, 0.05]
             )])
             
             fig.update_layout(
-                title="Distribución de Similaridad por Estilo",
-                height=400,
-                paper_bgcolor='rgba(0,0,0,0)',
-                plot_bgcolor='rgba(0,0,0,0)',
-                font=dict(color='#F4E4C1')
+                title=dict(
+                    text="Distribución de Similaridad por Estilo",
+                    font=dict(size=20, color='#2C1810')
+                ),
+                height=500,
+                paper_bgcolor='#FFFFFF',
+                plot_bgcolor='#FFFFFF',
+                font=dict(color='#2C1810', size=14),
+                showlegend=True,
+                legend=dict(
+                    orientation="v",
+                    yanchor="middle",
+                    y=0.5,
+                    xanchor="left",
+                    x=1.1,
+                    font=dict(size=16, color='#2C1810'),
+                    bgcolor='#FFF8DC',
+                    bordercolor='#D4741D',
+                    borderwidth=2
+                )
             )
             
             st.plotly_chart(fig, use_container_width=True)
             
+            # TARJETAS EN COLUMNAS (DISEÑO MEJORADO)
             st.subheader("📋 Detalle por Estilo")
-            
+
             df_analisis = pd.DataFrame({
                 'Estilo': label_encoder.classes_,
                 'Similaridad (%)': prediccion[0] * 100
             }).sort_values('Similaridad (%)', ascending=False)
-            
-            st.dataframe(df_analisis.style.background_gradient(cmap='YlOrBr'), 
-                        use_container_width=True)
+
+            rankings = ['🥇', '🥈', '🥉']
+
+            # Crear 3 columnas para las tarjetas
+            cols = st.columns(3)
+
+            for idx, (_, row) in enumerate(df_analisis.iterrows()):
+                estilo = row['Estilo']
+                sim = row['Similaridad (%)']
+                ranking = rankings[idx]
+    
+                # Definir colores según posición
+                if idx == 0:
+                    bg_color = '#C85A17'  # Naranja oscuro
+                    text_color = '#FFFFFF'
+                    border = '4px solid #8B3410'
+                elif idx == 1:
+                    bg_color = '#F4A950'  # Naranja medio
+                    text_color = '#000000'
+                    border = '4px solid #D4741D'
+                else:
+                    bg_color = '#FFD89C'  # Beige
+                    text_color = '#000000'
+                    border = '4px solid #F4A950'
+    
+                with cols[idx]:
+                    st.markdown(f"""
+                        <div style='
+                        background: {bg_color};
+                        color: {text_color};
+                        padding: 25px;
+                        border-radius: 15px;
+                        border: {border};
+                        box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+                        text-align: center;
+                        min-height: 180px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                    '>
+                        <div style='font-size: 48px; margin-bottom: 10px;'>{ranking}</div>
+                        <div style='font-size: 20px; font-weight: bold; margin-bottom: 15px;'>{estilo}</div>
+                        <div style='font-size: 36px; font-weight: bold;'>{sim:.2f}%</div>
+                        <div style='font-size: 14px; margin-top: 8px; opacity: 0.9;'>Similaridad</div>
+                        </div>
+        """, unsafe_allow_html=True)
             
             st.success("✅ **Recomendaciones:**")
             
@@ -803,10 +896,10 @@ elif "Modelo 3" in modelo_seleccionado:
                                  key=lambda x: x[1], reverse=True)
             
             if probs_sorted[0][1] > 0.8:
-                st.write(f"✅ Tu receta es claramente un **{probs_sorted[0][0]}**. "
+                st.write(f"✅ Tu receta es claramente una **{probs_sorted[0][0]}**. "
                         "Puedes comercializarla con ese nombre.")
             elif probs_sorted[0][1] > 0.6:
-                st.write(f"✅ Tu receta se parece más a un **{probs_sorted[0][0]}**, "
+                st.write(f"✅ Tu receta se parece más a una **{probs_sorted[0][0]}**, "
                         "aunque tiene características de otros estilos.")
             else:
                 st.write(f"🎨 Tu receta es **híbrida**, con características de:")
@@ -823,11 +916,11 @@ elif "Modelo 3" in modelo_seleccionado:
 st.markdown("---")
 st.markdown('<div class="header-decoration"></div>', unsafe_allow_html=True)
 st.markdown("""
-<div style='text-align: center; color: #F4E4C1;'>
-    <p style='font-size: 18px; font-weight: bold; color: #F4A950;'>🍺 Sistema Inteligente para Cervecerías Artesanales</p>
-    <p>Valdivia, Chile</p>
-    <p>Desarrollado con Deep Learning (TensorFlow/Keras) • 3 Modelos Independientes</p>
-    <p>Dataset: 150 muestras → 253 con augmentation | Accuracy: 95%+ | R²: Positivo</p>
+<div style='text-align: center; color: #2C1810;'>
+    <p style='font-size: 18px; font-weight: bold; color: #D4741D;'>🍺 Sistema Inteligente para Cervecerías Artesanales</p>
+    <p style='color: #2C1810;'>Valdivia, Chile</p>
+    <p style='color: #2C1810;'>Desarrollado con Deep Learning (TensorFlow/Keras) • 3 Modelos Independientes</p>
+    <p style='color: #2C1810;'>Dataset: 150 muestras → 253 con augmentation | Accuracy: 95%+ | R²: Positivo</p>
     <p style='font-size: 14px; color: #D4741D;'>Noviembre 2025</p>
 </div>
 """, unsafe_allow_html=True)

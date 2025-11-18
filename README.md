@@ -2,7 +2,8 @@
 
 Sistema multi-modelo de Deep Learning para control de calidad en cervecerías artesanales de Valdivia, Chile.
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](URL_DE_TU_APP)
+[Streamlit App]
+https://cerveza-control-calidad.streamlit.app/
 
 ---
 
