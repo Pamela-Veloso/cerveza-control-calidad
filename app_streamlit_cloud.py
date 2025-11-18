@@ -608,38 +608,39 @@ if "Modelo 1" in modelo_seleccionado:
             
             with col1:
                 st.subheader("📊 Probabilidades por Estilo")
-                
+    
                 df_prob = pd.DataFrame({
                     'Estilo': label_encoder.classes_,
                     'Probabilidad (%)': prediccion[0] * 100
                 })
-                
+    
+                # Crear gráfico SIN mostrar el valor en la barra
                 fig = px.bar(df_prob, x='Estilo', y='Probabilidad (%)',
-                            color='Probabilidad (%)',
-                            color_continuous_scale=[[0, '#8B4513'], [0.5, '#D4741D'], [1, '#F4A950']],
-                            text='Probabilidad (%)')
+                    color='Probabilidad (%)',
+                    color_continuous_scale=[[0, '#8B4513'], [0.5, '#D4741D'], [1, '#F4A950']])
+    
                 fig.update_traces(
-                    texttemplate='%{text:.1f}%',
-                    textposition='inside',  # ← CAMBIO: dentro de las barras
-                    textfont=dict(size=18, color='#FFFFFF', weight='bold')  # ← Blanco para que se vea
+                    texttemplate='',  # ← SIN TEXTO EN LAS BARRAS
+                    hovertemplate='<b>%{x}</b><br>Probabilidad: %{y:.1f}%<extra></extra>'
                 )
+    
                 fig.update_layout(
                     showlegend=False, 
-                    height=450,  # ← Más alto
+                    height=400,
                     paper_bgcolor='#FFFFFF',
                     plot_bgcolor='#FFFFFF',
                     font=dict(color='#2C1810', size=14),
                     xaxis=dict(
-                        title='',
-                        title_font=dict(size=16, color='#2C1810'),
+                        title='Estilo de Cerveza',
+                        title_font=dict(size=16, color='#2C1810', weight='bold'),
                         tickfont=dict(size=14, color='#2C1810', weight='bold')
                     ),
                     yaxis=dict(
                         title='Probabilidad (%)',
-                        title_font=dict(size=16, color='#2C1810'),
+                        title_font=dict(size=16, color='#2C1810', weight='bold'),
                         gridcolor='#E0E0E0',
                         tickfont=dict(size=14, color='#2C1810', weight='bold'),
-                        range=[0, 105]  # ← IMPORTANTE: espacio extra arriba
+                        range=[0, 105]
                     )
                 )
                 st.plotly_chart(fig, use_container_width=True)
@@ -840,28 +841,37 @@ elif "Modelo 3" in modelo_seleccionado:
             st.plotly_chart(fig, use_container_width=True)
             
             st.subheader("📋 Detalle por Estilo")
-            
+
             df_analisis = pd.DataFrame({
                 'Estilo': label_encoder.classes_,
                 'Similaridad (%)': prediccion[0] * 100
             }).sort_values('Similaridad (%)', ascending=False)
-            
-            # Colorear manualmente según valor
+
+            # Función para colorear con MEJOR CONTRASTE
             def colorear_fila(row):
                 val = row['Similaridad (%)']
                 if val > 70:
-                    color = '#FFB347'  # Naranja claro
+                    bg_color = '#D4741D'  # Naranja oscuro
+                    text_color = '#FFFFFF'  # Texto blanco
                 elif val > 30:
-                    color = '#FFDAB9'  # Melocotón
+                    bg_color = '#F4A950'  # Naranja medio
+                    text_color = '#2C1810'  # Texto oscuro
                 else:
-                    color = '#FFE4B5'  # Amarillo claro
-                return [f'background-color: {color}; color: #2C1810; font-weight: bold; font-size: 16px'] * len(row)
+                    bg_color = '#FFE4B5'  # Amarillo claro
+                    text_color = '#2C1810'  # Texto oscuro
+    
+                return [f'background-color: {bg_color}; color: {text_color}; font-weight: bold; font-size: 18px; padding: 12px;'] * len(row)
 
             st.dataframe(
-                df_analisis.style.apply(colorear_fila, axis=1)
-                .format({'Similaridad (%)': '{:.2f}%'}),
+                df_analisis.style
+                .apply(colorear_fila, axis=1)
+                .format({'Similaridad (%)': '{:.2f}%'})
+                .set_properties(**{
+                'text-align': 'center',
+                'border': '2px solid #D4741D'
+                }),
                 use_container_width=True,
-                height=200
+                height=220
             )
             
             st.success("✅ **Recomendaciones:**")
