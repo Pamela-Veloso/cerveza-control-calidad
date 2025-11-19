@@ -4,6 +4,8 @@ Sistema multi-modelo de Deep Learning para control de calidad en cervecerías ar
 
 [Streamlit App]
 https://cerveza-control-calidad.streamlit.app/
+[Presentación]
+https://www.canva.com/design/DAG5EH9Zr9I/3UYd09f9Sgf_iEmjh2WOYw/edit
 
 ---
 
